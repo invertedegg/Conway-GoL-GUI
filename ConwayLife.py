@@ -3,7 +3,9 @@ from tkinter import ttk
 import random as rand
 
 # Globals
-dimensions = 25
+yDimension = 50
+xDimension = yDimension * 3
+speed = 250
 alive = "*"
 dead = " "
 root = tk.Tk()
@@ -19,12 +21,13 @@ def printTerm(board):
         print()
 
 def findStatus(GoLBoard, x, y):
-    wrap = dimensions - 1
+    wrapy = yDimension - 1
+    wrapx = xDimension - 1
     count = 0
 
     # Find life status of top/bottom row neighbors
-    if y < dimensions - 1:
-        if x < dimensions - 1:
+    if y < yDimension - 1:
+        if x < xDimension - 1:
             for offset in range(-1, 2):
                 if GoLBoard[y - 1][x + offset] == alive: count += 1
                 if GoLBoard[y + 1][x + offset] == alive: count += 1
@@ -34,25 +37,25 @@ def findStatus(GoLBoard, x, y):
             for offset in range(-1, 1):
                 if GoLBoard[y - 1][x + offset] == alive: count += 1
                 if GoLBoard[y + 1][x + offset] == alive: count += 1
-            if GoLBoard[y - 1][x - wrap] == alive: count += 1
+            if GoLBoard[y - 1][x - wrapx] == alive: count += 1
             if GoLBoard[y][x - 1] == alive: count += 1
-            if GoLBoard[y][x - wrap] == alive: count += 1
-            if GoLBoard[y + 1][x - wrap] == alive: count += 1
+            if GoLBoard[y][x - wrapx] == alive: count += 1
+            if GoLBoard[y + 1][x - wrapx] == alive: count += 1
     else:
-        if x < dimensions - 1:
+        if x < xDimension - 1:
             for offset in range(-1, 2):
                 if GoLBoard[y - 1][x + offset] == alive: count += 1
-                if GoLBoard[y - wrap][x + offset] == alive: count += 1
+                if GoLBoard[y - wrapy][x + offset] == alive: count += 1
             if GoLBoard[y][x - 1] == alive: count += 1
             if GoLBoard[y][x + 1] == alive: count += 1
         else :
             for offset in range(-1, 1):
                 if GoLBoard[y - 1][x + offset] == alive: count += 1
-                if GoLBoard[y - wrap][x + offset] == alive: count += 1
-            if GoLBoard[y - 1][x - wrap] == alive: count += 1
+                if GoLBoard[y - wrapy][x + offset] == alive: count += 1
+            if GoLBoard[y - 1][x - wrapx] == alive: count += 1
             if GoLBoard[y][x - 1] == alive: count += 1
-            if GoLBoard[y][x - wrap] == alive: count += 1
-            if GoLBoard[y - wrap][x - wrap] == alive: count += 1
+            if GoLBoard[y][x - wrapx] == alive: count += 1
+            if GoLBoard[y - wrapy][x - wrapx] == alive: count += 1
 
     if count == 3:
         # Survived OR Reproduction
@@ -73,9 +76,9 @@ def nextGen(board):
     boardStr = ""
 
     nextBoard = []
-    for y in range(0, dimensions):
+    for y in range(0, yDimension):
         nextRow = []
-        for x in range(0, dimensions * 3):
+        for x in range(0, xDimension):
             if findStatus(board, x, y) == 1: nextRow.append(alive)
             else: nextRow.append(dead)
         nextBoard.append(nextRow)
@@ -84,17 +87,16 @@ def nextGen(board):
         for idx in row:
             boardStr += idx
         boardStr += "\n"
-    boardStr.format()
     boardOutput.configure(text=boardStr)
     # Set board global to the next generation
-    root.after(1000, nextGen, nextBoard)
+    root.after(speed, nextGen, nextBoard)
 
 # Randomly populates the game board for the initial state
 def randPopulate():
     board = []
-    for y in range(0, dimensions):
+    for y in range(0, yDimension):
         nextRow = []
-        for x in range(0, dimensions * 3):
+        for x in range(0, yDimension * 3):
             if rand.randrange(1, 11) == 1: nextRow.append(alive)
             else: nextRow.append(dead)
         board.append(nextRow)
@@ -104,13 +106,13 @@ def randPopulate():
 def main():
     # Window initializations
     root.title("Conway's Game of Life")
-    root.geometry("400x400+200+100")
+    root.geometry("1200x800+400+200")
 
     # GoLBoard indexing goes [y-axis][x-axis]
     GoLBoard = []
 
     GoLBoard = randPopulate()
-    root.after(1000, nextGen, GoLBoard)
+    root.after(speed, nextGen, GoLBoard)
 
     root.mainloop()
 
