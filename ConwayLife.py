@@ -102,7 +102,6 @@ def randPopulate(uSeed):
 
     # Check for user-enetered random seed
     if uSeed != "null":
-        print(uSeed)
         rand.seed(int(uSeed))
 
     for y in range(0, yDimension):
@@ -121,13 +120,23 @@ def main():
     # GoLBoard indexing goes [y-axis][x-axis]
     GoLBoard = []
 
-    if (argv[1] == "-s"):
-        GoLBoard = randPopulate(argv[2])
+    # Check command line arguments
+    if len(argv) > 1:
+        # Window initializations
+        root.title("Conway's Game of Life")
+        root.geometry("1250x850+100+0")
+
+        # GoLBoard indexing goes [y-axis][x-axis]
+        GoLBoard = []
+
+        if (argv[1] == "-s"):
+            GoLBoard = randPopulate(argv[2])
+            root.after(speed, nextGen, GoLBoard)
+            root.mainloop()
     else:
         GoLBoard = randPopulate("null")
-    root.after(speed, nextGen, GoLBoard)
-
-    root.mainloop()
+        root.after(speed, nextGen, GoLBoard)
+        root.mainloop()
 
 if __name__ == "__main__":
     main()
