@@ -26,8 +26,8 @@ def findStatus(GoLBoard, x, y):
     count = 0
 
     # Find life status of top/bottom row neighbors
-    if y < yDimension - 1:
-        if x < xDimension - 1:
+    if y < wrapy:
+        if x < wrapx:
             for offset in range(-1, 2):
                 if GoLBoard[y - 1][x + offset] == alive: count += 1
                 if GoLBoard[y + 1][x + offset] == alive: count += 1
@@ -42,7 +42,7 @@ def findStatus(GoLBoard, x, y):
             if GoLBoard[y][x - wrapx] == alive: count += 1
             if GoLBoard[y + 1][x - wrapx] == alive: count += 1
     else:
-        if x < xDimension - 1:
+        if x < wrapx:
             for offset in range(-1, 2):
                 if GoLBoard[y - 1][x + offset] == alive: count += 1
                 if GoLBoard[y - wrapy][x + offset] == alive: count += 1
@@ -71,7 +71,7 @@ def findStatus(GoLBoard, x, y):
         # Dead
         return 0
 
-
+# Determines what the next generation of the game board will be
 def nextGen(board):
     boardStr = ""
 
@@ -97,11 +97,10 @@ def randPopulate():
     for y in range(0, yDimension):
         nextRow = []
         for x in range(0, yDimension * 3):
-            if rand.randrange(1, 16) == 1: nextRow.append(alive)
+            if rand.randrange(1, 11) == 1: nextRow.append(alive)
             else: nextRow.append(dead)
         board.append(nextRow)
     return board
-
 
 def main():
     # Window initializations
