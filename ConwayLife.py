@@ -1,3 +1,4 @@
+from sys import argv
 import tkinter as tk
 from tkinter import ttk
 import random as rand
@@ -96,8 +97,14 @@ def nextGen(board):
     root.after(speed, nextGen, nextBoard)
 
 # Randomly populates the game board for the initial state
-def randPopulate():
+def randPopulate(uSeed):
     board = []
+
+    # Check for user-enetered random seed
+    if uSeed != "null":
+        print(uSeed)
+        rand.seed(int(uSeed))
+
     for y in range(0, yDimension):
         nextRow = []
         for x in range(0, yDimension * 3):
@@ -114,7 +121,10 @@ def main():
     # GoLBoard indexing goes [y-axis][x-axis]
     GoLBoard = []
 
-    GoLBoard = randPopulate()
+    if (argv[1] == "-s"):
+        GoLBoard = randPopulate(argv[2])
+    else:
+        GoLBoard = randPopulate("null")
     root.after(speed, nextGen, GoLBoard)
 
     root.mainloop()
