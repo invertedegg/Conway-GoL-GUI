@@ -8,10 +8,11 @@ xDimension = yDimension * 3
 speed = 250
 alive = "*"
 dead = " "
+
+# Tkinter Globals
 root = tk.Tk()
 boardOutput = tk.Label(root, text="", font="TkFixedFont", anchor="n")
 boardOutput.pack()
-
 
 # Prints game board to terminal for debugging purposes
 def printTerm(board):
@@ -20,7 +21,9 @@ def printTerm(board):
             print(idx, end="")
         print()
 
-def findStatus(GoLBoard, x, y):
+# Determines whether the cell at position (x, y) should live or
+# die given the rules of Conway's Game of Life
+def findStatus(board, x, y):
     wrapy = yDimension - 1
     wrapx = xDimension - 1
     count = 0
@@ -29,39 +32,40 @@ def findStatus(GoLBoard, x, y):
     if y < wrapy:
         if x < wrapx:
             for offset in range(-1, 2):
-                if GoLBoard[y - 1][x + offset] == alive: count += 1
-                if GoLBoard[y + 1][x + offset] == alive: count += 1
-            if GoLBoard[y][x - 1] == alive: count += 1
-            if GoLBoard[y][x + 1] == alive: count += 1
+                if board[y - 1][x + offset] == alive: count += 1
+                if board[y + 1][x + offset] == alive: count += 1
+            if board[y][x - 1] == alive: count += 1
+            if board[y][x + 1] == alive: count += 1
         else :
             for offset in range(-1, 1):
-                if GoLBoard[y - 1][x + offset] == alive: count += 1
-                if GoLBoard[y + 1][x + offset] == alive: count += 1
-            if GoLBoard[y - 1][x - wrapx] == alive: count += 1
-            if GoLBoard[y][x - 1] == alive: count += 1
-            if GoLBoard[y][x - wrapx] == alive: count += 1
-            if GoLBoard[y + 1][x - wrapx] == alive: count += 1
+                if board[y - 1][x + offset] == alive: count += 1
+                if board[y + 1][x + offset] == alive: count += 1
+            if board[y - 1][x - wrapx] == alive: count += 1
+            if board[y][x - 1] == alive: count += 1
+            if board[y][x - wrapx] == alive: count += 1
+            if board[y + 1][x - wrapx] == alive: count += 1
     else:
         if x < wrapx:
             for offset in range(-1, 2):
-                if GoLBoard[y - 1][x + offset] == alive: count += 1
-                if GoLBoard[y - wrapy][x + offset] == alive: count += 1
-            if GoLBoard[y][x - 1] == alive: count += 1
-            if GoLBoard[y][x + 1] == alive: count += 1
+                if board[y - 1][x + offset] == alive: count += 1
+                if board[y - wrapy][x + offset] == alive: count += 1
+            if board[y][x - 1] == alive: count += 1
+            if board[y][x + 1] == alive: count += 1
         else :
             for offset in range(-1, 1):
-                if GoLBoard[y - 1][x + offset] == alive: count += 1
-                if GoLBoard[y - wrapy][x + offset] == alive: count += 1
-            if GoLBoard[y - 1][x - wrapx] == alive: count += 1
-            if GoLBoard[y][x - 1] == alive: count += 1
-            if GoLBoard[y][x - wrapx] == alive: count += 1
-            if GoLBoard[y - wrapy][x - wrapx] == alive: count += 1
+                if board[y - 1][x + offset] == alive: count += 1
+                if board[y - wrapy][x + offset] == alive: count += 1
+            if board[y - 1][x - wrapx] == alive: count += 1
+            if board[y][x - 1] == alive: count += 1
+            if board[y][x - wrapx] == alive: count += 1
+            if board[y - wrapy][x - wrapx] == alive: count += 1
 
+    # Set status given amount of living neighbors
     if count == 3:
         # Survived OR Reproduction
         return 1
     elif count == 2:
-        if GoLBoard[y][x] == alive:
+        if board[y][x] == alive:
             # Survived
             return 1
         else:
