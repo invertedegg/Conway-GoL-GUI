@@ -6,7 +6,7 @@ import random as rand
 # Globals
 yDimension = 50
 xDimension = yDimension * 3
-speed = 250
+speed = 150
 alive = "*"
 dead = " "
 
@@ -14,6 +14,10 @@ dead = " "
 root = tk.Tk()
 boardOutput = tk.Label(root, text="", font="TkFixedFont", anchor="n")
 boardOutput.pack()
+
+# Usage message print on incorrect terminal execution or with the help flag
+def usage():
+    print("python3 ConwayLife.py [-h] [-s seed]")
 
 # Prints game board to terminal for debugging purposes
 def printTerm(board):
@@ -122,17 +126,20 @@ def main():
 
     # Check command line arguments
     if len(argv) > 1:
-        # Window initializations
-        root.title("Conway's Game of Life")
-        root.geometry("1250x850+100+0")
-
-        # GoLBoard indexing goes [y-axis][x-axis]
-        GoLBoard = []
-
         if (argv[1] == "-s"):
+            # Window initializations
+            root.title("Conway's Game of Life")
+            root.geometry("1250x850+100+0")
+
+            # GoLBoard indexing goes [y-axis][x-axis]
+            GoLBoard = []
+
             GoLBoard = randPopulate(argv[2])
             root.after(speed, nextGen, GoLBoard)
             root.mainloop()
+        else:
+            # Print the usage message
+            usage()
     else:
         GoLBoard = randPopulate("null")
         root.after(speed, nextGen, GoLBoard)
