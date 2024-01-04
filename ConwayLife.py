@@ -9,7 +9,7 @@ speed = 250
 alive = "*"
 dead = " "
 root = tk.Tk()
-boardOutput = tk.Label(root, text="", font="TkFixedFont")
+boardOutput = tk.Label(root, text="", font="TkFixedFont", anchor="n")
 boardOutput.pack()
 
 
@@ -97,7 +97,7 @@ def randPopulate():
     for y in range(0, yDimension):
         nextRow = []
         for x in range(0, yDimension * 3):
-            if rand.randrange(1, 11) == 1: nextRow.append(alive)
+            if rand.randrange(1, 16) == 1: nextRow.append(alive)
             else: nextRow.append(dead)
         board.append(nextRow)
     return board
@@ -106,7 +106,7 @@ def randPopulate():
 def main():
     # Window initializations
     root.title("Conway's Game of Life")
-    root.geometry("1200x800+400+200")
+    root.geometry("1250x850+100+0")
 
     # GoLBoard indexing goes [y-axis][x-axis]
     GoLBoard = []
